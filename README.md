@@ -29,6 +29,7 @@ Delete entire application
     
     # docker-compose down
     
+Note: Command needs to be run where the "docker-compose.yml" file is present
 ___
 
 Other resources :
