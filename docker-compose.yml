@@ -1,0 +1,42 @@
+version: '3'
+
+networks:
+  dev-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.240.0.0/16
+
+services:
+  mysql-dev-db:
+    image: mysql
+    volumes:
+      - mysql-dev-volume:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_DATABASE: dev
+    networks:
+      - dev-network
+  wordpress-dev-app:
+    image: wordpress
+    volumes:
+      - wordpress-dev-volume:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: mysql-dev-db
+      WORDPRESS_DB_USER: admin
+      WORDPRESS_DB_PASSWORD: admin
+      WORDPRESS_DB_NAME: dev
+    networks:
+      - dev-network
+    restart: always
+    ports:
+      - 8080:80
+    depends_on:
+      - mysql-dev-db
+
+volumes:
+  mysql-dev-volume:
+  wordpress-dev-volume:
